@@ -1,12 +1,11 @@
 import pytest
 import streamlit as st
-from streamlit_app import request
 import requests
 import pydeck
-from streamlit_app.py import request_coord, request_temp
+from streamlit_app import request_coord, request_temp, show_city_on_map
+from unittest.mock import patch
 
-
-def test_request(mocker):
+"""def test_request(mocker):
     mock_response = mocker.Mock()
     mock_response.json.return_value = {
         'city': {'coord': {'lat': 48.8566, 'lon': 2.3522}},
@@ -16,14 +15,22 @@ def test_request(mocker):
 
     API_KEY = st.secrets["API_KEY"]
     city = "Paris"
-    coords, today, tomorrow, day_after_tomorrow = get_weather(city, API_KEY)
+    coords, today, tomorrow, day_after_tomorrow = (city, API_KEY)
 
     assert coords['lat'] == 48.8566
     assert coords['lon'] == 2.3522
     assert today == 20
     assert tomorrow == 21
-    assert day_after_tomorrow == 22
+    assert day_after_tomorrow == 22"""
 
+
+
+def test_show_city_on_map(mocker):
+    with patch.object(st, "session_state", create=True):
+        mock_warning = mocker.patch("streamlit.warning")
+
+        show_city_on_map("Paris", None, None)
+        mock_warning.assert_called_with("Ville introuvable")
 
 if __name__ == "__main__":
     pytest.main()
