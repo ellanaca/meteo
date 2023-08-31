@@ -2,28 +2,30 @@ import streamlit as st
 import pydeck as pdk
 import requests
 
+OPENWEATHERMAP_API_KEY = 'dbd3a6c08996ab3e34218f2521cf96c6'
+
 def main():
     st.title('Météo :sun_with_face:')
 
     col1, col2 = st.columns([5, 1])
 
     with col1:
-        city = st.text_input('', value="Ville...")
+        city = st.text_input('', value='Ville...')
 
     with col2:
         st.title('')
         if st.button('Rechercher'):
             show_city_on_map(city)
 
-    st.write("")
+    st.write('')
     if 'map' not in st.session_state:
         default_latitude = 48.8566
         default_longitude = 2.3522
 
         default_layer = pdk.Layer(
-            "ScatterplotLayer",
-            data=[{"position": [default_longitude, default_latitude], "tooltip": "Emplacement par défaut"}],
-            get_position="position",
+            'ScatterplotLayer',
+            data=[{'position': [default_longitude, default_latitude], 'tooltip': 'Emplacement par défaut'}],
+            get_position='position',
             get_radius=100,
             get_fill_color=[255, 0, 0],
             pickable=True,
@@ -40,15 +42,15 @@ def main():
 def get_coordinates_for_city(city):
     base_url = "https://nominatim.openstreetmap.org/search"
     params = {
-        "q": city,
-        "format": "json",
+        'q': 'city',
+        'format': 'json',
     }
     response = requests.get(base_url, params=params)
     data = response.json()
 
     if data:
-        latitude = float(data[0]["lat"])
-        longitude = float(data[0]["lon"])
+        latitude = float(data[0]['lat'])
+        longitude = float(data[0]['lon'])
         return latitude, longitude
     else:
         return None, None
@@ -58,9 +60,9 @@ def show_city_on_map(city):
 
     if latitude is not None and longitude is not None:
         layer = pdk.Layer(
-            "ScatterplotLayer",
-            data=[{"position": [longitude, latitude], "tooltip": city}],
-            get_position="position",
+            'ScatterplotLayer',
+            data=[{'position': [longitude, latitude], 'tooltip': city}],
+            get_position='position',
             get_radius=100,
             get_fill_color=[255, 0, 0],
             pickable=True,
@@ -71,7 +73,7 @@ def show_city_on_map(city):
 
         st.session_state.map = map_pydeck
     else:
-        st.warning("Ville introuvable ou problème de géocodage.")
+        st.warning('Ville introuvable')
 
 if __name__ == "__main__":
     main()
