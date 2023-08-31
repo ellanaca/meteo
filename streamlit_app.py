@@ -2,7 +2,7 @@ import streamlit as st
 import pydeck as pdk
 import requests
 
-OPENWEATHERMAP_API_KEY = 'dbd3a6c08996ab3e34218f2521cf96c6'
+
 
 def main():
     st.title('Météo :sun_with_face:')
